@@ -1,4 +1,5 @@
 //copied from a web site
+var propName={0:'project',1:'coder',2:'story',3:'task',4:'iteration',5:'complexity'};
 window.addEventListener('load', eventWindowLoaded,false);
 function readSingleFile(evt) {
     //Retrieve the first (and only!) File from the FileList object
