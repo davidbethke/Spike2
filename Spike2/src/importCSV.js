@@ -1,5 +1,6 @@
 //copied from a web site
 var propName={0:'project',1:'coder',2:'story',3:'task',4:'iteration',5:'complexity'};
+var propCount=6;
 var taskList=Array();
 window.addEventListener('load', eventWindowLoaded,false);
 function readSingleFile(evt) {
@@ -30,7 +31,7 @@ function readSingleFile(evt) {
         	}
         }
         */
-        for (var i=0; i<6;i++){
+        for (var i=0; i<propCount;i++){
         	document.write('PropName:'+i);
         	document.write(propName[i]);
         }
@@ -49,7 +50,7 @@ function readSingleFile(evt) {
         // try to write out the taskList array
         for(var i=0; i< taskList.length;i++){
     		document.write('Task:'+i+' ');
-        	for(var k=0; k< 6;k++){
+        	for(var k=0; k< propCount;k++){
         		document.write(taskList[i][propName[k]]);
         	}
         	document.write('<br/>');
@@ -64,4 +65,17 @@ function readSingleFile(evt) {
   }
 function eventWindowLoaded(){
   document.getElementById('csvFile').addEventListener('change', readSingleFile, false);
+}
+
+
+function getCoderList(){
+	var coderList= new Array();
+	for(var coder in taskList){
+		if(coder matches a list Member){
+			//don't add the coder
+		}
+		else{
+			//add the coder
+		}
+	}
 }
