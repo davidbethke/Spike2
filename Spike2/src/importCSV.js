@@ -20,8 +20,8 @@ function readSingleFile(evt) {
         );  
         */
         var arrResults= contents.split('\n');
-        document.write('length'+arrResults.length);
-        document.write('<br/>');
+        //document.write('length'+arrResults.length);
+        //document.write('<br/>');
         /*
         for(var val in arrResults){
         	document.write(arrResults[val]+' ');
@@ -32,8 +32,8 @@ function readSingleFile(evt) {
         }
         */
         for (var i=0; i<propCount;i++){
-        	document.write('PropName:'+i);
-        	document.write(propName[i]);
+        	//document.write('PropName:'+i);
+        	//document.write(propName[i]);
         }
         for (var i=0; i< arrResults.length; i++){
         	var task= new Object();
@@ -49,13 +49,14 @@ function readSingleFile(evt) {
         }
         // try to write out the taskList array
         for(var i=0; i< taskList.length;i++){
-    		document.write('Task:'+i+' ');
+    		//document.write('Task:'+i+' ');
         	for(var k=0; k< propCount;k++){
-        		document.write(taskList[i][propName[k]]);
+        		//disable
+        		//document.write(taskList[i][propName[k]]);
         	}
-        	document.write('<br/>');
+        	//document.write('<br/>');
         }
-        document.write('done writing');
+        //document.write('done writing');
         
       };
       r.readAsText(f);
@@ -65,17 +66,37 @@ function readSingleFile(evt) {
   }
 function eventWindowLoaded(){
   document.getElementById('csvFile').addEventListener('change', readSingleFile, false);
+  document.getElementById('sort').addEventListener('mousedown', sortList, false);
+
+}
+function sortList(){
+	var result=getPropList('coder');
+	document.write('SortList len:'+result.length);
 }
 
-
-function getCoderList(){
-	var coderList= new Array();
-	for(var coder in taskList){
-		if(coder matches a list Member){
-			//don't add the coder
+// call this function w/ the propName as propSearch, returns a list of unique property Names
+function getPropList(propSearch){
+	var propList= new Array();
+	var firstFound=false;
+	for(var task in taskList){
+		
+		if(firstFound){
+			for(var propName in propList){
+				if(propList[propName] == taskList[task][propSearch]){
+					//don't add the coder
+					// only add new coders to the list of coders coderList
+				}
+				else{
+					propList[propList.length]=taskList[task];
+				}
+			}
 		}
 		else{
-			//add the coder
+			//just starting out need to add the first coder to the coderList
+			// should only be true for prop=0, the first propName in the taskList
+			propList[task]=taskList[task];
+			firstFound=true;
 		}
 	}
+	return propList;
 }
