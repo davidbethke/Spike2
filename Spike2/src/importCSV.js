@@ -85,10 +85,16 @@ function getPropList(propSearch){
 				if(propList[propName] == searchVal){
 					//don't add the coder
 					// only add new coders to the list of coders coderList
-					var matchVal;
+					potentialMatch=false;
+					
 				}
 				else{
+					//propList[propList.length]=searchVal;
+					potentialMatch=searchVal;
+				}
+				if(potentialMatch){
 					propList[propList.length]=searchVal;
+
 				}
 			}
 		}
