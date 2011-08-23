@@ -1,5 +1,5 @@
 //copied from a web site
-var propName={0:'project',1:'coder',2:'story',3:'task',4:'iteration',5:'complexity'};
+var propName={0:'project',1:'story',2:'coder',3:'task',4:'iteration',5:'complexity'};
 var propCount=6;
 var taskList=Array();
 window.addEventListener('load', eventWindowLoaded,false);
@@ -79,22 +79,23 @@ function getPropList(propSearch){
 	var propList= new Array();
 	var firstFound=false;
 	for(var task in taskList){
-		
+		var searchVal=taskList[task][propSearch];
 		if(firstFound){
 			for(var propName in propList){
-				if(propList[propName] == taskList[task][propSearch]){
+				if(propList[propName] == searchVal){
 					//don't add the coder
 					// only add new coders to the list of coders coderList
+					var matchVal;
 				}
 				else{
-					propList[propList.length]=taskList[task];
+					propList[propList.length]=searchVal;
 				}
 			}
 		}
 		else{
 			//just starting out need to add the first coder to the coderList
 			// should only be true for prop=0, the first propName in the taskList
-			propList[task]=taskList[task];
+			propList[0]=searchVal;
 			firstFound=true;
 		}
 	}
