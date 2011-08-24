@@ -2,6 +2,8 @@
 var propName={0:'project',1:'story',2:'coder',3:'task',4:'iteration',5:'complexity'};
 var propCount=6;
 var taskList=Array();
+var WIDTH=500;
+var HEIGHT=300;
 
 window.addEventListener('load', eventWindowLoaded,false);
 function readSingleFile(evt) {
@@ -83,9 +85,38 @@ function getTotal(key,val){
 }
 function chart(x,y){
 	var canvas=document.getElementById('canvasChart');
-	var context=canvas.getContext();
+	var context=canvas.getContext('2d');
+	// draw axis
+	//drawHole(context, 50,50);
+	drawAxis(context);
+	//draw chart title
+	//draw axis labels
+	//draw result
 	
 }
+function drawAxis(context){
+	var xOffset=50;
+	var yOffset=50;
+	// need to transform the coord system, Ill try manually
+	context.strokeStyle='black';
+	context.lineWidth='4';
+	var xOrgin=xOffset;
+	var yOrgin=HEIGHT-yOffset;
+	var xMax=WIDTH;
+	var yMax= 0;
+	
+		//x axis
+		context.moveTo(xOrgin,yOrgin);
+		context.lineTo(xMax,yOrgin);
+		context.stroke();
+		//y axis
+		context.moveTo(xOrgin,yOrgin);
+		context.lineTo(xOrgin,yMax);
+		context.stroke();
+	
+	
+}
+
 
 function sortList(){
 	var result= new Array();
@@ -111,6 +142,7 @@ function sortList(){
 	select=[selectProject,selectIteration,selectCoder];
 	fill=[result[0],result[4],result[2]];
 	fillSelect(select, fill);
+	/* coder count, total here
 	for(var i=0; i < result[2].length; i++){
 		var coder=result[2][i];
 		var count=getCount('coder',coder);
@@ -122,6 +154,8 @@ function sortList(){
 	}
 	document.write('-------------------');
 	document.write('<br/>');
+	*/
+	/* iteration total
 	for(var i=0; i<result[4].length; i++){
 		var iteration=result[4][i];
 		var total=getTotal('iteration',iteration);
@@ -130,9 +164,24 @@ function sortList(){
 	}
 	//var count= getCount('coder','jane');
 	//document.write('Coder Count: jane: '+count);
+	*/
+	// try to create a chart here
+	chart(0,0);
 	
-	
-	
+}
+
+function drawHole(context,x,y){
+	var offset=50;
+	var radius=10;
+	context.strokeStyle='red';
+	context.fillStyle='silver';
+	context.lineWidth=1;
+	context.beginPath();
+		context.arc(x-offset,y-offset,radius,(Math.PI/180)*0,(Math.PI/180)*360,false);
+		context.stroke();
+		context.fill();
+	context.closePath();
+		
 }
 
 
