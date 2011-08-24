@@ -6,8 +6,27 @@
 		<script type='text/javascript' src='../src/importCSV.js'></script>
 	</head>
 	<body>
+
 			Enter CSV file <input type='file' id='csvFile'/>
-			<canvas>HTML5 needed</canvas>
+			<p id='sort'>Click me for Sort list</p>
+<div id='forms'>
+	<form id='formProject'>
+		<select id='selectProject' name='project'>
+		<option value='default'>Select Project</option>
+		</select>
+	</form>
+	<form id='formIteration'>
+		<select id='selectIteration' name='iteration'>
+		<option value='default'>Select Iteration</option>
+		</select>
+	</form>
+	<form id='formCoder'>
+		<select id='selectCoder' name='coder'>
+		<option value='default'>Select Coder</option>
+		</select>
+	</form>
+</div>
+			<canvas id='canvasChart'>HTML5 needed</canvas>
 			
 	</body> 
 </html>
