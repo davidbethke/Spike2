@@ -93,9 +93,38 @@ function chart(x,y){
 	//draw axis labels
 	drawLabels(context,'xLabel','yLabel');
 	//draw result
+	points=[22,21,15,28,29,18];
+	drawLine(context,points);
 	
 }
 
+function drawLine(context,points){
+	//context.save();
+	//context.translate(0,HEIGHT); // lower left origin maybe
+	var xPoint=new Array();
+	var xDiv= WIDTH/points.length;
+	var yMax=Math.max.apply(null,points);
+	var yMin=Math.min.apply(null,points);
+	var yRange=yMax-yMin;
+	var yDiv= HEIGHT/yRange;
+	context.strokeStyle='black';
+	context.lineWidth='4';
+	for(var point in points){
+		xPoint[point]=point*xDiv;
+	}
+	context.moveTo(0,0);
+	for(var point in points){
+		// draw something
+		var yVal=(yMax-points[point])*yDiv;
+		context.lineTo(xPoint[point],yVal);
+		context.stroke();
+		
+	}
+	
+	//context.restore();
+	
+	
+}
 function drawLabels(context,xLabel,yLabel){
 	var xMid= WIDTH/2;
 	var yMid= HEIGHT/2;
