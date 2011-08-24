@@ -70,16 +70,22 @@ function eventWindowLoaded(){
 
 }
 function sortList(){
-	var result=getPropList('coder');
+	//var result=getPropList('coder');
+	var result=sortUniq2('coder');
 	document.write('SortList len:'+result.length);
+	for(var res in result){
+		document.write(' '+result[res]);
+	}
 }
 
 // call this function w/ the propName as propSearch, returns a list of unique property Names
 function getPropList(propSearch){
 	var propList= new Array();
 	var firstFound=false;
+	var potentialMatch;
 	for(var task in taskList){
 		var searchVal=taskList[task][propSearch];
+		potentialMatch=false;
 		if(firstFound){
 			for(var propName in propList){
 				if(propList[propName] == searchVal){
@@ -92,10 +98,11 @@ function getPropList(propSearch){
 					//propList[propList.length]=searchVal;
 					potentialMatch=searchVal;
 				}
-				if(potentialMatch){
-					propList[propList.length]=searchVal;
+				
+			}
+			if(potentialMatch){
+				propList[propList.length]=potentialMatch;
 
-				}
 			}
 		}
 		else{
@@ -106,4 +113,42 @@ function getPropList(propSearch){
 		}
 	}
 	return propList;
+}
+function sortUnique(key){
+	var sortArray=new Array();
+	var resultArray= new Array();
+	// fill sort array w/ the propertys to be sorted
+	for(var i=0; i< taskList.length; i++){
+		sortArray[i]=taskList[i][key];
+	}
+	for(var i=0; i<sortArray.length; i++){
+		for(var k=i+1; k< sortArray.length;k++){
+			if(sortArray[i]=== sortArray[k]){
+				k=++i;
+				resultArray.push(sortArray[i]);
+
+			}
+			
+		}
+	}
+	return resultArray;
+}
+function sortUniq2(key){
+	var sortArray=new Array();
+	var resultArray=new Array();
+	var resultMap= {};
+	// fill sort array
+	for(var i=0; i< taskList.length;i++){
+		sortArray[i]= taskList[i][key];
+	}
+
+	//create key map, duplicates ignored I think
+	for(var i=0; i<sortArray.length;i++){
+		resultMap[sortArray[i]]= sortArray[i];
+	}
+	for(var k in resultMap){
+		resultArray.push([resultMap[k]]);
+	}
+	return resultArray;
+	
 }
