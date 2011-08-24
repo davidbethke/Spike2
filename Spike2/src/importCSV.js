@@ -71,6 +71,16 @@ function getCount(key,val){
 	return count;
 	
 }
+function getTotal(key,val){
+	var total=0;
+	for(var i=0; i<taskList.length-1; i++){
+		var task=taskList[i][key];
+		if(task[0] == val[0]){
+			total+=parseInt(taskList[i]['complexity']);
+		}
+	}
+	return total;
+}
 function chart(x,y){
 	var canvas=document.getElementById('canvasChart');
 	var context=canvas.getContext();
@@ -104,7 +114,18 @@ function sortList(){
 	for(var i=0; i < result[2].length; i++){
 		var coder=result[2][i];
 		var count=getCount('coder',coder);
+		var total=getTotal('coder',coder);
 		document.write('Coder Count for'+coder+' is:'+count);
+		document.write('Coder Total for'+coder+' is:'+total);
+
+		document.write('<br/>');
+	}
+	document.write('-------------------');
+	document.write('<br/>');
+	for(var i=0; i<result[4].length; i++){
+		var iteration=result[4][i];
+		var total=getTotal('iteration',iteration);
+		document.write('Iteration Total for'+iteration+'is:'+total);
 		document.write('<br/>');
 	}
 	//var count= getCount('coder','jane');
