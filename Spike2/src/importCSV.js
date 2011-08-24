@@ -87,13 +87,37 @@ function chart(x,y){
 	var canvas=document.getElementById('canvasChart');
 	var context=canvas.getContext('2d');
 	// draw axis
-	//drawHole(context, 50,50);
 	drawAxis(context);
 	//draw chart title
+	drawTitle(context,'Chart Title');
 	//draw axis labels
+	drawLabels(context,'xLabel','yLabel');
 	//draw result
 	
 }
+
+function drawLabels(context,xLabel,yLabel){
+	var xMid= WIDTH/2;
+	var yMid= HEIGHT/2;
+	context.font="8pt Calibri";
+	context.fillStyle="#00ff00";
+	//xLabel
+	context.fillText(xLabel,xMid,HEIGHT-10);
+	//yLabel, rotate context to rotate text, then restore
+	//context.save();
+	//context.rotate(Math.PI/2);
+	context.fillText(yLabel,10,yMid);
+	//context.restore();
+}
+function drawTitle(context,title){
+	var x = WIDTH-75;
+    var y = 50;
+    context.font = "12pt Calibri";
+    context.fillStyle = "#0000ff"; // text color
+    context.fillText(title, x, y);
+	
+}
+
 function drawAxis(context){
 	var xOffset=50;
 	var yOffset=50;
