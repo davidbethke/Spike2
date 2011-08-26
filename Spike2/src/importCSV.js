@@ -82,7 +82,7 @@ function getKeyTasks(subTaskList,key,val){
 	for(var i=0; i<subTaskList.length;i++){
 		var task=subTaskList[i]; // the task object in the taskList array
 		var taskHeading=subTaskList[i][key]; // the value of the key, for matching
-		if(taskHeading[0]== val[0]){
+		if(taskHeading[0] == val[0]){
 			
 			//add the task to the results array;
 			results[resultsItr]=task;
@@ -248,7 +248,7 @@ function sortList(){
 		document.write(subResults['iteration']);
 		document.write('<br/>');
 	}
-	chart(0,0);
+	// do nothing for now chart(0,0);
 	
 }
 
