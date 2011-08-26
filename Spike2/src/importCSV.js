@@ -52,12 +52,12 @@ function eventWindowLoaded(){
 
 }
 
-function getCount(key,val){
+function getCount(subTaskList,key,val){
 	// all the  elements are double quoted, need to strip those w/ some matcher type thing
 	var count=0;
-	for(var i=0; i<taskList.length-1;i++){
+	for(var i=0; i<subTaskList.length-1;i++){
 		//document.write(taskList[i][key]);
-		var task=taskList[i][key];
+		var task=subTaskList[i][key];
 		//document.write('task is:'+task);
 		//document.write('val is:'+val);
 
@@ -73,6 +73,26 @@ function getCount(key,val){
 	return count;
 	
 }
+function getKeyTasks(subTaskList,key,val){
+	// I should return an array of tasks that match the key
+	// I should work off the "big" list taskList, changed to subTask so it can recurively be called with smaller lists
+	// I will then submit this sub list of Tasks to getCount and getTotal
+	var results=new Array();
+	var resultsItr=0;
+	for(var i=0; i<subTaskList.length;i++){
+		var task=subTaskList[i]; // the task object in the taskList array
+		var taskHeading=subTaskList[i][key]; // the value of the key, for matching
+		if(taskHeading[0]== val[0]){
+			
+			//add the task to the results array;
+			results[resultsItr]=task;
+			resultsItr++;
+		}
+		
+	}
+	return results;
+	
+}
 function getTotal(key,val){
 	var total=0;
 	for(var i=0; i<taskList.length-1; i++){
@@ -83,7 +103,7 @@ function getTotal(key,val){
 	}
 	return total;
 }
-function chart(x,y){
+function chart(x,y,points){
 	var canvas=document.getElementById('canvasChart');
 	var context=canvas.getContext('2d');
 	// draw axis
@@ -93,7 +113,7 @@ function chart(x,y){
 	//draw axis labels
 	drawLabels(context,'xLabel','yLabel');
 	//draw result
-	points=[22,21,15,28,29,18];
+	//points=[22,21,15,28,29,18];
 	drawLine(context,points);
 	
 }
@@ -219,6 +239,15 @@ function sortList(){
 	//document.write('Coder Count: jane: '+count);
 	*/
 	// try to create a chart here
+	
+	//try to get a sublist of tasks using the new getKeyTasks(key,val)
+	// try iterations
+	var subResults=new Array();
+	subResults=getKeyTasks(taskList,'iteration',0);
+	for(results in subResults){
+		document.write(subResults['iteration']);
+		document.write('<br/>');
+	}
 	chart(0,0);
 	
 }
