@@ -105,35 +105,36 @@ function getTotal(subTaskList,key,val){
 	}
 	return total;
 }
-function chart(x,y,points){
+function chart(x,y,color,title,points){
 	var canvas=document.getElementById('canvasChart');
 	var context=canvas.getContext('2d');
+	var lineColor=['yellow','blue','green','brown','red','orange'];
 	// draw axis
 	drawAxis(context);
 	//draw chart title
-	drawTitle(context,'Chart Title');
+	drawTitle(context,title);
 	//draw axis labels
 	drawLabels(context,'xLabel','yLabel');
 	//draw result
 	//points=[22,21,15,28,29,18];
-	drawLine(context,points);
+	drawLine(context,lineColor[color],points);
 	
 }
 
-function drawLine(context,points){
+function drawLine(context,lineColor,points){
 	//context.save();
 	//context.translate(0,HEIGHT); // lower left origin maybe
 	var xOffset=yOffset=50;
 	var xPoint=new Array();
-	var xDiv= (WIDTH-xOffset)/points.length;
+	var xDiv= WIDTH/points.length;
 	var yMax=Math.max.apply(null,points);
 	var yMin=Math.min.apply(null,points);
-	var yRange=yMax-yMin+yOffset;
+	var yRange=yMax-yMin;
 	var yDiv= HEIGHT/yRange;
-	context.strokeStyle='black';
+	context.strokeStyle=lineColor;
 	context.lineWidth='4';
 	for(var point in points){
-		xPoint[point]=point*xDiv;
+		xPoint[point]=point*xDiv+xOffset;
 	}
 	context.moveTo(0,0);
 	for(var point in points){
@@ -272,7 +273,9 @@ function showResults(){
 		//document.write('<br/>');
 		
 	}
-	 chart(0,0,subResultsCount);
+	 chart(0,0,1,coderSelect+' Totals',subResultsCount);
+	 chart(0,0,2,coderSelect+' Totals',subResultsTotal);
+
 	
 }
 
