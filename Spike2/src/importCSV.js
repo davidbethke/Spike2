@@ -253,14 +253,27 @@ function showResults(){
 	
 	//try to get a sublist of tasks using the new getKeyTasks(key,val)
 	// try iterations
+	//shitload of arrays? can this be done better?
 	var subResults=new Array();
 	var subResultsCount=new Array();
 	var subResultsTotal=new Array();
-	var resultIteration=new Array();
-	var val=[1];
+	var resultsProject=new Array();
+	var resultsIteration=new Array();
+	var resultsCoder=new Array();
+	// select elements
+	var selectProject=document.getElementById('selectProject');
+	var selectIteration=document.getElementById('selectIteration');
 	var selectCoder=document.getElementById('selectCoder');
+	//get selected elements
+	resultsProject=getSelectedItems(selectProject);
+	for(result in resultsProject){
+		document.write('Project results:'+resultsProject[result]);
+		document.write('<br/>');
+	}
 	var coder=selectCoder.value;
 	// iterate over every iteration
+	//get the sublists from project iteration and coder arrays
+	//
 	var resultIteration=sortUniq2('iteration');
 	var resultCoder=sortUniq2('coder');
 	for(var i=0; i<resultIteration.length-1;i++){
@@ -278,10 +291,19 @@ function showResults(){
 		//document.write('<br/>');
 		
 	}
-	 chart(0,0,1,coderSelect+' Totals',subResultsCount);
-	 chart(0,0,2,coderSelect+' Totals',subResultsTotal);
+	 chart(0,0,1,coderSelect+' Count',subResultsCount);
+	 //chart(0,0,2,coderSelect+' Totals',subResultsTotal);
 
 	
+}
+function getSelectedItems(select){
+	var results=new Array();
+	for (var i=0; i< select.options.length; i++){
+		if(select.options[i].selected){
+			results.push(select.options[i].text);
+		}
+	}
+	return results;
 }
 
 function drawHole(context,x,y){
