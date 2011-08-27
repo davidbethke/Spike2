@@ -93,12 +93,12 @@ function getKeyTasks(subTaskList,key,val){
 	return results;
 	
 }
-function getTotal(key,val){
+function getTotal(subTaskList,key,val){
 	var total=0;
-	for(var i=0; i<taskList.length-1; i++){
-		var task=taskList[i][key];
+	for(var i=0; i<subTaskList.length-1; i++){
+		var task=subTaskList[i][key];
 		if(task[0] == val[0]){
-			total+=parseInt(taskList[i]['complexity']);
+			total+=parseInt(subTaskList[i]['complexity']);
 		}
 	}
 	return total;
@@ -250,8 +250,9 @@ function sortList(){
 		//document.write('<br/>');
 	}
 	var coderSelect=['john'];
+	var total=getTotal(subResults, 'coder', coderSelect);
 	var count=getCount(subResults,'coder',coderSelect);
-	document.write('john has count of:'+count);
+	document.write('john has count of:'+count+' and a total of '+total);
 	
 	
 	// do nothing for now chart(0,0);
