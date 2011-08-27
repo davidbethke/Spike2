@@ -108,6 +108,8 @@ function getTotal(subTaskList,key,val){
 function chart(x,y,color,title,points){
 	var canvas=document.getElementById('canvasChart');
 	var context=canvas.getContext('2d');
+	context.clearRect(0,0,canvas.width,canvas.height);
+	context.beginPath();
 	var lineColor=['yellow','blue','green','brown','red','orange'];
 	// draw axis
 	drawAxis(context);
@@ -256,15 +258,18 @@ function showResults(){
 	var subResultsTotal=new Array();
 	var resultIteration=new Array();
 	var val=[1];
+	var selectCoder=document.getElementById('selectCoder');
+	var coder=selectCoder.value;
 	// iterate over every iteration
 	var resultIteration=sortUniq2('iteration');
+	var resultCoder=sortUniq2('coder');
 	for(var i=0; i<resultIteration.length-1;i++){
 		subResults=getKeyTasks(taskList,'iteration',resultIteration[i]);
 		for(results in subResults){
 			//document.write(subResults[results]['iteration']);
 			//document.write('<br/>');
 		}
-		var coderSelect=['john'];
+		var coderSelect=[resultCoder[coder]];
 		subResultsCount[i]=getCount(subResults,'coder',coderSelect);
 		subResultsTotal[i]=getTotal(subResults, 'coder', coderSelect);
 		//var total=getTotal(subResults, 'coder', coderSelect);
