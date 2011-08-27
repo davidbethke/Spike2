@@ -68,7 +68,9 @@ function getCount(subTaskList,key,val){
 		//var pat=/\w+/g;
 		//var pm=task.match(pat);
 		//val='"'+val+'"';
-		if(task[0] == val[0]){
+		
+		// try to unhack val[0] to just val, like in getKeyTask, getTotal etc
+		if(task[0] == val){
 			count++;
 		}
 	}
@@ -259,9 +261,13 @@ function showResults(){
 	var subTaskList=new Array();
 	var subResultsCount=new Array();
 	var subResultsTotal=new Array();
+	// ending up w/ an array of an array, since this array is assigned an array, try no array
 	var resultsProject=new Array();
 	var resultsIteration=new Array();
 	var resultsCoder=new Array();
+	//var resultsProject;
+	//var resultsIteration;
+	//var resultsCoder;
 	// select elements
 	var selectProject=document.getElementById('selectProject');
 	var selectIteration=document.getElementById('selectIteration');
@@ -311,25 +317,50 @@ function showResults(){
 	// fill subTaskList, from project selection, iteration selection and coder selection;
 	//project
 	//temp remove project
+	var iterSubTaskList=new Array();
+	var coderSubTaskList=new Array();
 	
 	for(var i=0; i< resultsProject.length;i++){
 		subTaskList=(getKeyTasks(taskList, 'project', resultsProject[i]));
 	}
 	
 	for(var i=0; i< resultsIteration.length;i++){
-		subTaskList=getKeyTasks(subTaskList, 'iteration', resultsIteration[i]);
+		//iterSubTaskList=getKeyTasks(subTaskList, 'iteration', resultsIteration[i]);
+		iterSubTaskList=iterSubTaskList.concat(getKeyTasks(subTaskList, 'iteration', resultsIteration[i]));
+
 	}
 	for(var i=0; i<resultsCoder.length;i++){
-		subTaskList=getKeyTasks(subTaskList, 'coder', resultsCoder[i]);
+		//subTaskList=getKeyTasks(subTaskList, 'coder', resultsCoder[i]);
+		coderSubTaskList=coderSubTaskList.concat(getKeyTasks(iterSubTaskList, 'coder', resultsCoder[i]));
+
+		
 	}
+	/*
+	document.write('effing subtasklist bullshit <br/>');
 	for(task in subTaskList){
 		document.write(subTaskList[task]['coder']+':'+subTaskList[task]['iteration']+':'+subTaskList[task]['project']);
 		document.write('<br/>');
 	}
-	 //chart(0,0,1,coderSelect+' Count',subResultsCount);
+	*/
+	// subTaskList now established, need to do the "functions" on the subTaskList, ie all iterations, one coder, count, some iterations,
+	// get the utility for one coder
+	//count=getCount(iterSubTaskList,'coder',resultsCoder[0]);
+	//document.write('effing count'+count);
+	subResultsCount=utility(iterSubTaskList, resultsIteration, 'coder', resultsCoder[0]); // coder / iteration count
+	chart(0,0,1,resultsCoder[0]+' Count',subResultsCount);
 	 //chart(0,0,2,coderSelect+' Totals',subResultsTotal);
 
 	
+}
+function utility(subTaskList,results,key,val){
+	// currently returning an array per iteration of a single coder
+	var subResultsCount=new Array();
+	for(var i=0; i<results.length;i++){
+		subResultsCount[i]=getCount(subTaskList,'iteration',results[i]);
+	}
+	return subResultsCount;
+	
+	return subResultsCount;
 }
 function getSelectedItems(select){
 	var results=new Array();
