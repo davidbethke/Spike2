@@ -48,6 +48,8 @@ function removeQuote(quoted){
 function eventWindowLoaded(){
   document.getElementById('csvFile').addEventListener('change', readSingleFile, false);
   document.getElementById('sort').addEventListener('mousedown', sortList, false);
+  document.getElementById('results').addEventListener('mousedown', showResults, false);
+
   
 
 }
@@ -121,11 +123,12 @@ function chart(x,y,points){
 function drawLine(context,points){
 	//context.save();
 	//context.translate(0,HEIGHT); // lower left origin maybe
+	var xOffset=yOffset=50;
 	var xPoint=new Array();
-	var xDiv= WIDTH/points.length;
+	var xDiv= (WIDTH-xOffset)/points.length;
 	var yMax=Math.max.apply(null,points);
 	var yMin=Math.min.apply(null,points);
-	var yRange=yMax-yMin;
+	var yRange=yMax-yMin+yOffset;
 	var yDiv= HEIGHT/yRange;
 	context.strokeStyle='black';
 	context.lineWidth='4';
@@ -238,24 +241,38 @@ function sortList(){
 	//var count= getCount('coder','jane');
 	//document.write('Coder Count: jane: '+count);
 	*/
-	// try to create a chart here
+	
+	
+}
+
+function showResults(){
+// try to create a chart here
 	
 	//try to get a sublist of tasks using the new getKeyTasks(key,val)
 	// try iterations
 	var subResults=new Array();
+	var subResultsCount=new Array();
+	var subResultsTotal=new Array();
+	var resultIteration=new Array();
 	var val=[1];
-	subResults=getKeyTasks(taskList,'iteration',val);
-	for(results in subResults){
-		//document.write(subResults[results]['iteration']);
+	// iterate over every iteration
+	var resultIteration=sortUniq2('iteration');
+	for(var i=0; i<resultIteration.length-1;i++){
+		subResults=getKeyTasks(taskList,'iteration',resultIteration[i]);
+		for(results in subResults){
+			//document.write(subResults[results]['iteration']);
+			//document.write('<br/>');
+		}
+		var coderSelect=['john'];
+		subResultsCount[i]=getCount(subResults,'coder',coderSelect);
+		subResultsTotal[i]=getTotal(subResults, 'coder', coderSelect);
+		//var total=getTotal(subResults, 'coder', coderSelect);
+		//var count=getCount(subResults,'coder',coderSelect);
+		//document.write('john has count of:'+count+' and a total of '+total+'for iteration:'+resultIteration[i]);
 		//document.write('<br/>');
+		
 	}
-	var coderSelect=['john'];
-	var total=getTotal(subResults, 'coder', coderSelect);
-	var count=getCount(subResults,'coder',coderSelect);
-	document.write('john has count of:'+count+' and a total of '+total);
-	
-	
-	// do nothing for now chart(0,0);
+	 chart(0,0,subResultsCount);
 	
 }
 
