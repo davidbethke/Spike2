@@ -79,12 +79,13 @@ function getKeyTasks(subTaskList,key,val){
 	// I should return an array of tasks that match the key
 	// I should work off the "big" list taskList, changed to subTask so it can recurively be called with smaller lists
 	// I will then submit this sub list of Tasks to getCount and getTotal
+	// need to understand the arrayness of val, now look like val[0] doesnt work, but val might, let's test it
 	var results=new Array();
 	var resultsItr=0;
 	for(var i=0; i<subTaskList.length-1;i++){
 		var task=subTaskList[i]; // the task object in the taskList array
 		var taskHeading=subTaskList[i][key]; // the value of the key, for matching
-		if(taskHeading[0] == val[0]){
+		if(taskHeading[0] == val){
 			
 			//add the task to the results array;
 			results[resultsItr]=task;
@@ -254,7 +255,8 @@ function showResults(){
 	//try to get a sublist of tasks using the new getKeyTasks(key,val)
 	// try iterations
 	//shitload of arrays? can this be done better?
-	var subResults=new Array();
+	//var subResults=new Array(); // subResults  should be subTaskList
+	var subTaskList=new Array();
 	var subResultsCount=new Array();
 	var subResultsTotal=new Array();
 	var resultsProject=new Array();
@@ -266,14 +268,28 @@ function showResults(){
 	var selectCoder=document.getElementById('selectCoder');
 	//get selected elements
 	resultsProject=getSelectedItems(selectProject);
+	resultsIteration=getSelectedItems(selectIteration);
+	resultsCoder=getSelectedItems(selectCoder);
+	// test values
+	/*
 	for(result in resultsProject){
 		document.write('Project results:'+resultsProject[result]);
 		document.write('<br/>');
 	}
-	var coder=selectCoder.value;
+	for(result in resultsIteration){
+		document.write('Project results:'+resultsIteration[result]);
+		document.write('<br/>');
+	}
+	for(result in resultsCoder){
+		document.write('Project results:'+resultsCoder[result]);
+		document.write('<br/>');
+	}
+	*/
+	//var coder=selectCoder.value;
 	// iterate over every iteration
 	//get the sublists from project iteration and coder arrays
 	//
+	/* original test
 	var resultIteration=sortUniq2('iteration');
 	var resultCoder=sortUniq2('coder');
 	for(var i=0; i<resultIteration.length-1;i++){
@@ -291,7 +307,26 @@ function showResults(){
 		//document.write('<br/>');
 		
 	}
-	 chart(0,0,1,coderSelect+' Count',subResultsCount);
+	*/
+	// fill subTaskList, from project selection, iteration selection and coder selection;
+	//project
+	//temp remove project
+	
+	for(var i=0; i< resultsProject.length;i++){
+		subTaskList=(getKeyTasks(taskList, 'project', resultsProject[i]));
+	}
+	
+	for(var i=0; i< resultsIteration.length;i++){
+		subTaskList=getKeyTasks(subTaskList, 'iteration', resultsIteration[i]);
+	}
+	for(var i=0; i<resultsCoder.length;i++){
+		subTaskList=getKeyTasks(subTaskList, 'coder', resultsCoder[i]);
+	}
+	for(task in subTaskList){
+		document.write(subTaskList[task]['coder']+':'+subTaskList[task]['iteration']+':'+subTaskList[task]['project']);
+		document.write('<br/>');
+	}
+	 //chart(0,0,1,coderSelect+' Count',subResultsCount);
 	 //chart(0,0,2,coderSelect+' Totals',subResultsTotal);
 
 	
@@ -300,7 +335,7 @@ function getSelectedItems(select){
 	var results=new Array();
 	for (var i=0; i< select.options.length; i++){
 		if(select.options[i].selected){
-			results.push(select.options[i].text);
+			results.push(removeQuote(select.options[i].text));
 		}
 	}
 	return results;
