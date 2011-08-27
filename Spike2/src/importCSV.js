@@ -2,6 +2,8 @@
 var propName={0:'project',1:'story',2:'coder',3:'task',4:'iteration',5:'complexity'};
 var propCount=6;
 var taskList=Array();
+var WIDTH=500;
+var HEIGHT=300;
 
 window.addEventListener('load', eventWindowLoaded,false);
 function readSingleFile(evt) {
@@ -46,16 +48,18 @@ function removeQuote(quoted){
 function eventWindowLoaded(){
   document.getElementById('csvFile').addEventListener('change', readSingleFile, false);
   document.getElementById('sort').addEventListener('mousedown', sortList, false);
+  document.getElementById('results').addEventListener('mousedown', showResults, false);
+
   
 
 }
 
-function getCount(key,val){
+function getCount(subTaskList,key,val){
 	// all the  elements are double quoted, need to strip those w/ some matcher type thing
 	var count=0;
-	for(var i=0; i<taskList.length-1;i++){
+	for(var i=0; i<subTaskList.length-1;i++){
 		//document.write(taskList[i][key]);
-		var task=taskList[i][key];
+		var task=subTaskList[i][key];
 		//document.write('task is:'+task);
 		//document.write('val is:'+val);
 
@@ -71,11 +75,125 @@ function getCount(key,val){
 	return count;
 	
 }
-function chart(x,y){
-	var canvas=document.getElementById('canvasChart');
-	var context=canvas.getContext();
+function getKeyTasks(subTaskList,key,val){
+	// I should return an array of tasks that match the key
+	// I should work off the "big" list taskList, changed to subTask so it can recurively be called with smaller lists
+	// I will then submit this sub list of Tasks to getCount and getTotal
+	var results=new Array();
+	var resultsItr=0;
+	for(var i=0; i<subTaskList.length-1;i++){
+		var task=subTaskList[i]; // the task object in the taskList array
+		var taskHeading=subTaskList[i][key]; // the value of the key, for matching
+		if(taskHeading[0] == val[0]){
+			
+			//add the task to the results array;
+			results[resultsItr]=task;
+			resultsItr++;
+		}
+		
+	}
+	return results;
 	
 }
+function getTotal(subTaskList,key,val){
+	var total=0;
+	for(var i=0; i<subTaskList.length-1; i++){
+		var task=subTaskList[i][key];
+		if(task[0] == val[0]){
+			total+=parseInt(subTaskList[i]['complexity']);
+		}
+	}
+	return total;
+}
+function chart(x,y,color,title,points){
+	var canvas=document.getElementById('canvasChart');
+	var context=canvas.getContext('2d');
+	var lineColor=['yellow','blue','green','brown','red','orange'];
+	// draw axis
+	drawAxis(context);
+	//draw chart title
+	drawTitle(context,title);
+	//draw axis labels
+	drawLabels(context,'xLabel','yLabel');
+	//draw result
+	//points=[22,21,15,28,29,18];
+	drawLine(context,lineColor[color],points);
+	
+}
+
+function drawLine(context,lineColor,points){
+	//context.save();
+	//context.translate(0,HEIGHT); // lower left origin maybe
+	var xOffset=yOffset=50;
+	var xPoint=new Array();
+	var xDiv= WIDTH/points.length;
+	var yMax=Math.max.apply(null,points);
+	var yMin=Math.min.apply(null,points);
+	var yRange=yMax-yMin;
+	var yDiv= HEIGHT/yRange;
+	context.strokeStyle=lineColor;
+	context.lineWidth='4';
+	for(var point in points){
+		xPoint[point]=point*xDiv+xOffset;
+	}
+	context.moveTo(0,0);
+	for(var point in points){
+		// draw something
+		var yVal=(yMax-points[point])*yDiv;
+		context.lineTo(xPoint[point],yVal);
+		context.stroke();
+		
+	}
+	
+	//context.restore();
+	
+	
+}
+function drawLabels(context,xLabel,yLabel){
+	var xMid= WIDTH/2;
+	var yMid= HEIGHT/2;
+	context.font="8pt Calibri";
+	context.fillStyle="#00ff00";
+	//xLabel
+	context.fillText(xLabel,xMid,HEIGHT-10);
+	//yLabel, rotate context to rotate text, then restore
+	//context.save();
+	//context.rotate(Math.PI/2);
+	context.fillText(yLabel,10,yMid);
+	//context.restore();
+}
+function drawTitle(context,title){
+	var x = WIDTH-75;
+    var y = 50;
+    context.font = "12pt Calibri";
+    context.fillStyle = "#0000ff"; // text color
+    context.fillText(title, x, y);
+	
+}
+
+function drawAxis(context){
+	var xOffset=50;
+	var yOffset=50;
+	// need to transform the coord system, Ill try manually
+	context.strokeStyle='black';
+	context.lineWidth='4';
+	var xOrgin=xOffset;
+	var yOrgin=HEIGHT-yOffset;
+	var xMax=WIDTH;
+	var yMax= 0;
+	
+		//x axis
+		context.moveTo(xOrgin,yOrgin);
+		context.lineTo(xMax,yOrgin);
+		context.stroke();
+		//y axis
+		context.moveTo(xOrgin,yOrgin);
+		context.lineTo(xOrgin,yMax);
+		context.stroke();
+	
+	
+}
+
 
 function sortList(){
 	var result= new Array();
@@ -101,17 +219,78 @@ function sortList(){
 	select=[selectProject,selectIteration,selectCoder];
 	fill=[result[0],result[4],result[2]];
 	fillSelect(select, fill);
+	/* coder count, total here
 	for(var i=0; i < result[2].length; i++){
 		var coder=result[2][i];
 		var count=getCount('coder',coder);
+		var total=getTotal('coder',coder);
 		document.write('Coder Count for'+coder+' is:'+count);
+		document.write('Coder Total for'+coder+' is:'+total);
+
+		document.write('<br/>');
+	}
+	document.write('-------------------');
+	document.write('<br/>');
+	*/
+	/* iteration total
+	for(var i=0; i<result[4].length; i++){
+		var iteration=result[4][i];
+		var total=getTotal('iteration',iteration);
+		document.write('Iteration Total for'+iteration+'is:'+total);
 		document.write('<br/>');
 	}
 	//var count= getCount('coder','jane');
 	//document.write('Coder Count: jane: '+count);
+	*/
 	
 	
+}
+
+function showResults(){
+// try to create a chart here
 	
+	//try to get a sublist of tasks using the new getKeyTasks(key,val)
+	// try iterations
+	var subResults=new Array();
+	var subResultsCount=new Array();
+	var subResultsTotal=new Array();
+	var resultIteration=new Array();
+	var val=[1];
+	// iterate over every iteration
+	var resultIteration=sortUniq2('iteration');
+	for(var i=0; i<resultIteration.length-1;i++){
+		subResults=getKeyTasks(taskList,'iteration',resultIteration[i]);
+		for(results in subResults){
+			//document.write(subResults[results]['iteration']);
+			//document.write('<br/>');
+		}
+		var coderSelect=['john'];
+		subResultsCount[i]=getCount(subResults,'coder',coderSelect);
+		subResultsTotal[i]=getTotal(subResults, 'coder', coderSelect);
+		//var total=getTotal(subResults, 'coder', coderSelect);
+		//var count=getCount(subResults,'coder',coderSelect);
+		//document.write('john has count of:'+count+' and a total of '+total+'for iteration:'+resultIteration[i]);
+		//document.write('<br/>');
+		
+	}
+	 chart(0,0,1,coderSelect+' Totals',subResultsCount);
+	 chart(0,0,2,coderSelect+' Totals',subResultsTotal);
+
+	
+}
+
+function drawHole(context,x,y){
+	var offset=50;
+	var radius=10;
+	context.strokeStyle='red';
+	context.fillStyle='silver';
+	context.lineWidth=1;
+	context.beginPath();
+		context.arc(x-offset,y-offset,radius,(Math.PI/180)*0,(Math.PI/180)*360,false);
+		context.stroke();
+		context.fill();
+	context.closePath();
+		
 }
 
 

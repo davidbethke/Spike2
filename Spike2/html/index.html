@@ -3,12 +3,14 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>Try to Import a CSV file w/ Javascript</title>
+		<link rel="stylesheet" type="text/css" href="./style.css">
 		<script type='text/javascript' src='../src/importCSV.js'></script>
 	</head>
 	<body>
 
 			Enter CSV file <input type='file' id='csvFile'/>
 			<p id='sort'>Click me for Sort list</p>
+			<p id='results'>Click me for Chart</p>
 <div id='forms'>
 	<form id='formProject'>
 		<select id='selectProject' name='project'>
@@ -26,7 +28,7 @@
 		</select>
 	</form>
 </div>
-			<canvas id='canvasChart'>HTML5 needed</canvas>
+			<canvas id='canvasChart' width='500' height='300'>HTML5 needed</canvas>
 			
 	</body> 
 </html>
