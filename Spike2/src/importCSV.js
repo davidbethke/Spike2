@@ -79,7 +79,7 @@ function getKeyTasks(subTaskList,key,val){
 	// I will then submit this sub list of Tasks to getCount and getTotal
 	var results=new Array();
 	var resultsItr=0;
-	for(var i=0; i<subTaskList.length;i++){
+	for(var i=0; i<subTaskList.length-1;i++){
 		var task=subTaskList[i]; // the task object in the taskList array
 		var taskHeading=subTaskList[i][key]; // the value of the key, for matching
 		if(taskHeading[0] == val[0]){
@@ -243,11 +243,17 @@ function sortList(){
 	//try to get a sublist of tasks using the new getKeyTasks(key,val)
 	// try iterations
 	var subResults=new Array();
-	subResults=getKeyTasks(taskList,'iteration',0);
+	var val=[1];
+	subResults=getKeyTasks(taskList,'iteration',val);
 	for(results in subResults){
-		document.write(subResults['iteration']);
-		document.write('<br/>');
+		//document.write(subResults[results]['iteration']);
+		//document.write('<br/>');
 	}
+	var coderSelect=['john'];
+	var count=getCount(subResults,'coder',coderSelect);
+	document.write('john has count of:'+count);
+	
+	
 	// do nothing for now chart(0,0);
 	
 }
