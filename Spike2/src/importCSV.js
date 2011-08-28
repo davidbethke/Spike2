@@ -27,11 +27,15 @@ function readSingleFile(evt) {
         	for(var k=0; k < splitResults.length;k++){
         		//remove double quotes
         		var unquoted=removeQuote(splitResults[k]);
-        		task[propName[k]]=unquoted;
+        		
+        			task[propName[k]]=unquoted;
+        		
            		//task[propName[k]]=splitResults[k];
           	}
-        	
-        	taskList[i]=task;
+        	// don't add undefined variables
+        	if(undefined !=task[propName[0]]){
+        		taskList[i]=task;
+        	}
         }
         
       };
@@ -57,7 +61,7 @@ function eventWindowLoaded(){
 function getCount(subTaskList,key,val){
 	// all the  elements are double quoted, need to strip those w/ some matcher type thing
 	var count=0;
-	for(var i=0; i<subTaskList.length-1;i++){
+	for(var i=0; i<subTaskList.length;i++){
 		//document.write(taskList[i][key]);
 		var task=subTaskList[i][key];
 		//document.write('task is:'+task);
@@ -84,11 +88,13 @@ function getKeyTasks(subTaskList,key,val){
 	// need to understand the arrayness of val, now look like val[0] doesnt work, but val might, let's test it
 	var results=new Array();
 	var resultsItr=0;
-	for(var i=0; i<subTaskList.length-1;i++){
+	for(var i=0; i<subTaskList.length;i++){
 		var task=subTaskList[i]; // the task object in the taskList array
 		var taskHeading=subTaskList[i][key]; // the value of the key, for matching
-		if(taskHeading[0] == val){
-			
+		//passes test on taskHeading, passes in web browser w/ taskHeading[0]
+		//if(taskHeading[0] == val){
+		if(taskHeading == val){
+	
 			//add the task to the results array;
 			results[resultsItr]=task;
 			resultsItr++;
@@ -100,7 +106,7 @@ function getKeyTasks(subTaskList,key,val){
 }
 function getTotal(subTaskList,key,val){
 	var total=0;
-	for(var i=0; i<subTaskList.length-1; i++){
+	for(var i=0; i<subTaskList.length; i++){
 		var task=subTaskList[i][key];
 		if(task[0] == val[0]){
 			total+=parseInt(subTaskList[i]['complexity']);
